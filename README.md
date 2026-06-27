@@ -6,7 +6,7 @@
 ![Vertex AI](https://img.shields.io/badge/Vertex-AI-34A853)
 ![Status](https://img.shields.io/badge/Status-Active-success)
 
-> A hands-on engineering exploration of the Google Agent Development Kit (ADK), focusing on runtime architecture, session management, state, memory, MCP, and production-ready AI agent development.
+> A hands-on engineering exploration of the Google Agent Development Kit (ADK), where each experiment investigates how ADK works internally through documentation, source code analysis, runtime verification, and database inspection.
 
 ---
 
@@ -16,13 +16,14 @@ Most Google ADK examples demonstrate **how** to build an agent.
 
 This repository focuses on understanding **how Google ADK works internally**.
 
-Each experiment explores one architectural concept by:
+Each experiment follows the same engineering methodology:
 
-- Understanding the underlying design
-- Implementing the feature from scratch
-- Observing runtime behavior
-- Documenting architectural decisions
-- Recording key learnings and engineering takeaways
+- Read the official documentation
+- Explore the ADK source code
+- Build a runnable example
+- Verify runtime behavior
+- Inspect the SQLite database (where applicable)
+- Document only verified findings
 
 The objective is to build a deep understanding of AI agent runtime architecture rather than simply producing working examples.
 
@@ -37,10 +38,14 @@ This repository explores:
 - Persistent Conversation Memory
 - Conversation State
 - Event Lifecycle
+- Context Management
+- Token Optimization
 - Streaming Responses
-- Tool Calling
 - Model Context Protocol (MCP)
 - Multi-Agent Systems
+
+## Future Explorations
+
 - Long-Term Memory
 - Retrieval-Augmented Generation (RAG)
 - Production Deployment Patterns
@@ -85,14 +90,15 @@ The objective of this repository is to:
 - Persistent Session Management
 - Conversation Memory
 - Environment Configuration
+- Event Lifecycle
 
 ---
 
-## 🚧 Currently Exploring
+## 🚧 Next Experiment
 
-- Conversation State
-- Event Lifecycle
+- Context Management & Token Optimization
 
+Current focus: Understanding how Google ADK reconstructs model context, selects Events for prompts, and optimizes token usage.
 ---
 
 # Experiment Roadmap
@@ -101,16 +107,12 @@ The objective of this repository is to:
 |------------|:------:|
 | ✅ Experiment 01 – Building a Custom ADK Runtime | Completed |
 | ✅ Experiment 02 – Implementing Persistent Session Management | Completed |
-| 🚧 Experiment 03 – Understanding Conversation State | In Progress |
-| ⏳ Experiment 04 – Event Lifecycle | Planned |
-| ⏳ Experiment 05 – Streaming Responses | Planned |
-| ⏳ Experiment 06 – Tool Calling | Planned |
+| ✅ Experiment 03 – Understanding Conversation State | Completed |
+| ✅ Experiment 04 – Understanding Event Lifecycle | Completed |
+| 🚧 Experiment 05 – Context Management & Token Optimization | In Progress |
+| ⏳ Experiment 06 – Streaming Responses | Planned |
 | ⏳ Experiment 07 – Model Context Protocol (MCP) | Planned |
 | ⏳ Experiment 08 – Multi-Agent Systems | Planned |
-| ⏳ Experiment 09 – Long-Term Memory | Planned |
-| ⏳ Experiment 10 – RAG Integration | Planned |
-| ⏳ Experiment 11 – Production Deployment | Planned |
-
 ---
 
 # Engineering Principles
@@ -123,6 +125,23 @@ The implementation in this repository follows these principles:
 - Reusable Components
 - Production-Oriented Architecture
 - Incremental Experimentation
+
+---
+
+# Verification Philosophy
+
+Every conclusion in this repository is based on evidence rather than assumptions.
+
+Whenever possible, findings are verified through:
+
+- Official Google ADK documentation
+- ADK source code analysis
+- Runtime experiments
+- SQLite database inspection
+
+Only verified observations are documented.
+
+Each experiment validates findings by comparing runtime behavior with the Google ADK source code to ensure conclusions accurately reflect the framework's implementation.
 
 ---
 
@@ -139,25 +158,37 @@ The following diagram illustrates the high-level runtime architecture used throu
                   ▼
             bootstrap.py
                   │
-      ┌───────────┼───────────┐
-      ▼           ▼           ▼
-   env.py     session.py   runner.py
-      │           │           │
-      │           ▼           │
-      │  DatabaseSessionService
-      │           │
-      │           ▼
-      │       SQLite DB
-      │
-      ▼
- multi_tool_agent
-      │
-      ▼
-   Gemini Model
-      │
-      ▼
-  Agent Response
-```
+      ┌───────────┼────────────┐
+      ▼           ▼            ▼
+   env.py     session.py    runner.py
+      │           ▲            │
+      ▼           │            ▼
+Vertex AI Config  │     Runner Execution
+                  │            │
+                  └────────────┘
+                       │
+                       ▼
+              DatabaseSessionService
+                       │
+                       ▼
+                 SQLite Database
+              ┌────────┼─────────┐
+              ▼        ▼         ▼
+          sessions   events   user_states
+                       │
+                       ▼
+                multi_tool_agent
+                       │
+                       ▼
+                  root_agent
+                       │
+                       ▼
+                 Gemini Model
+                       │
+                       ▼
+                Agent Response
+```                          
+                         
 
 ---
 
@@ -187,7 +218,9 @@ The following diagram illustrates the high-level runtime architecture used throu
 │
 ├── experiments/
 │   ├── Experiment-01-Building-a-Custom-ADK-Launcher.md
-│   └── Experiment-02-Implementing-Persistent-Session-Management.md
+│   ├── Experiment-02-Implementing-Persistent-Session-Management.md
+│   ├── Experiment-03-Understanding-Conversation-State.md
+│   └── Experiment-04-Understanding-Event-Lifecycle.md
 │
 ├── data/
 │
@@ -278,24 +311,24 @@ The custom runtime automatically:
 
 Each experiment builds upon previous work and explores one architectural concept in Google ADK.
 
-Every experiment includes:
+Every experiment documents:
 
 - Objective
-- Problem Statement
-- Solution
-- Architecture
-- Observations
-- Key Learnings
-- Engineering Takeaway
+- Research Questions
+- Runtime Verification
+- Architecture / Runtime Flow
+- Findings
+- Verification Checklist
+- References
 
 | Experiment | Status |
 |------------|:------:|
 | Experiment 01 – Building a Custom ADK Runtime | ✅ |
-| Experiment 02 – Implementing Persistent Session Management | ✅ |
-| Experiment 03 – Understanding Conversation State | 🚧 |
-| Experiment 04 – Event Lifecycle | ⏳ |
-| Experiment 05 – Streaming Responses | ⏳ |
-| Experiment 06 – Tool Calling | ⏳ |
+| Experiment 02 – Persistent Session Management | ✅ |
+| Experiment 03 – Understanding Conversation State | ✅ |
+| Experiment 04 – Understanding Event Lifecycle | ✅ |
+| Experiment 05 – Context Management & Token Optimization | 🚧 |
+| Experiment 06 – Streaming Responses | ⏳ |
 | Experiment 07 – Model Context Protocol (MCP) | ⏳ |
 | Experiment 08 – Multi-Agent Systems | ⏳ |
 
@@ -306,25 +339,22 @@ Every experiment includes:
 Every concept in this repository follows the same engineering process.
 
 ```text
-Understand
-     │
-     ▼
-Design
-     │
-     ▼
-Implement
-     │
-     ▼
-Experiment
-     │
-     ▼
-Observe
-     │
-     ▼
-Document
-     │
-     ▼
-Refine
+Read Documentation
+        │
+        ▼
+Explore Source Code
+        │
+        ▼
+Build Experiment
+        │
+        ▼
+Run & Verify
+        │
+        ▼
+Inspect Runtime
+        │
+        ▼
+Document Findings
 ```
 
 The focus is on understanding the underlying architecture rather than simply building a working example.
@@ -339,7 +369,7 @@ The focus is on understanding the underlying architecture rather than simply bui
 
 ✔ Explored Google ADK runtime architecture through practical engineering experiments
 
-✔ Documented every experiment with architecture diagrams, observations, and engineering takeaways
+✔ Verified Google ADK runtime behavior through official documentation, source code analysis, runtime experiments, and SQLite database inspection
 
 ✔ Repository structured as an incremental engineering lab rather than isolated code examples
 
@@ -358,11 +388,13 @@ The focus is on understanding the underlying architecture rather than simply bui
 
 Upcoming experiments will explore:
 
-- Conversation State
-- Event Lifecycle
+- Context Management & Token Optimization
 - Streaming Responses
 - Model Context Protocol (MCP)
-- Multi-Agent Collaboration
+- Multi-Agent Systems
+
+Future explorations include:
+
 - Long-Term Memory
 - Retrieval-Augmented Generation (RAG)
 - Production Deployment Patterns

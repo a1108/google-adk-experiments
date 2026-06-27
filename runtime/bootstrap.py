@@ -1,7 +1,7 @@
 import asyncio
 
 from runtime.env import load_environment
-from runtime.session import create_session
+from runtime.session import get_or_create_session
 from runtime.runner import create_runner
 
 from runtime.config import APP_NAME
@@ -29,7 +29,7 @@ def bootstrap():
 
     # Create SessionService and Session.
     session_service, session = asyncio.run(
-        create_session(
+        get_or_create_session(
             APP_NAME,
             USER_ID,
             SESSION_ID,

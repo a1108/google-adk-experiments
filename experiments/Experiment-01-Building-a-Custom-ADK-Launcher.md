@@ -321,7 +321,7 @@ Persistent sessions will be explored in the next experiment.
 
 # Next Experiment
 
-## Experiment 02 – Understanding Session Persistence
+# Experiment 02 - Implementing Persistent Session Management
 
 Topics to explore:
 

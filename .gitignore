@@ -17,3 +17,6 @@ __pycache__/
 
 # ADK runtime
 **/.adk/
+
+# Runtime data
+data/*.db

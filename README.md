@@ -39,6 +39,7 @@ This repository explores:
 - Conversation State
 - Event Lifecycle
 - Context Management
+- Event Compaction
 - Token Optimization
 - Streaming Responses
 - Model Context Protocol (MCP)
@@ -91,14 +92,18 @@ The objective of this repository is to:
 - Conversation Memory
 - Environment Configuration
 - Event Lifecycle
+- Context Reconstruction
+- Event Compaction
+- Context Management
+- Token Optimization
 
 ---
 
 ## 🚧 Next Experiment
 
-- Context Management & Token Optimization
+- Streaming Responses
 
-Current focus: Understanding how Google ADK reconstructs model context, selects Events for prompts, and optimizes token usage.
+> **Current Focus:** Investigating how Google ADK implements streaming responses, emits Partial Events, reconstructs final Events, and manages the complete streaming execution lifecycle.
 ---
 
 # Experiment Roadmap
@@ -109,8 +114,8 @@ Current focus: Understanding how Google ADK reconstructs model context, selects 
 | ✅ Experiment 02 – Implementing Persistent Session Management | Completed |
 | ✅ Experiment 03 – Understanding Conversation State | Completed |
 | ✅ Experiment 04 – Understanding Event Lifecycle | Completed |
-| 🚧 Experiment 05 – Context Management & Token Optimization | In Progress |
-| ⏳ Experiment 06 – Streaming Responses | Planned |
+| ✅ Experiment 05 – Context Management & Token Optimization | Completed |
+| 🚧 Experiment 06 – Streaming Responses | In Progress |
 | ⏳ Experiment 07 – Model Context Protocol (MCP) | Planned |
 | ⏳ Experiment 08 – Multi-Agent Systems | Planned |
 ---
@@ -172,9 +177,15 @@ Vertex AI Config  │     Runner Execution
                        │
                        ▼
                  SQLite Database
-              ┌────────┼─────────┐
-              ▼        ▼         ▼
-          sessions   events   user_states
+                       │
+                       ▼
+                  Session Events
+                       │
+                       ▼
+          Context Reconstruction
+                       │
+                       ▼
+             Event Compaction (Optional)
                        │
                        ▼
                 multi_tool_agent
@@ -220,7 +231,8 @@ Vertex AI Config  │     Runner Execution
 │   ├── Experiment-01-Building-a-Custom-ADK-Launcher.md
 │   ├── Experiment-02-Implementing-Persistent-Session-Management.md
 │   ├── Experiment-03-Understanding-Conversation-State.md
-│   └── Experiment-04-Understanding-Event-Lifecycle.md
+│   ├── Experiment-04-Understanding-Event-Lifecycle.md
+│   └── Experiment-05-Context-Management-and-Token-Optimization.md
 │
 ├── data/
 │
@@ -327,8 +339,8 @@ Every experiment documents:
 | Experiment 02 – Persistent Session Management | ✅ |
 | Experiment 03 – Understanding Conversation State | ✅ |
 | Experiment 04 – Understanding Event Lifecycle | ✅ |
-| Experiment 05 – Context Management & Token Optimization | 🚧 |
-| Experiment 06 – Streaming Responses | ⏳ |
+| Experiment 05 – Context Management & Token Optimization | ✅ |
+| Experiment 06 – Streaming Responses | 🚧 |
 | Experiment 07 – Model Context Protocol (MCP) | ⏳ |
 | Experiment 08 – Multi-Agent Systems | ⏳ |
 
@@ -369,6 +381,8 @@ The focus is on understanding the underlying architecture rather than simply bui
 
 ✔ Explored Google ADK runtime architecture through practical engineering experiments
 
+✔ Investigated Session Management, Conversation State, Event Lifecycle, Context Reconstruction, Event Compaction, and Token Optimization through documentation, source code analysis, runtime verification, and SQLite database inspection
+
 ✔ Verified Google ADK runtime behavior through official documentation, source code analysis, runtime experiments, and SQLite database inspection
 
 ✔ Repository structured as an incremental engineering lab rather than isolated code examples
@@ -388,7 +402,6 @@ The focus is on understanding the underlying architecture rather than simply bui
 
 Upcoming experiments will explore:
 
-- Context Management & Token Optimization
 - Streaming Responses
 - Model Context Protocol (MCP)
 - Multi-Agent Systems

@@ -16,6 +16,7 @@ The objective of this experiment is to implement persistent conversation managem
 
 During Experiment 01, the runtime created a new session every time the application started.
 
+```text
 Application Start
         │
         ▼
@@ -32,6 +33,7 @@ Application Stops
         │
         ▼
 Conversation Lost
+```
 
 Although the agent could remember information during execution, restarting the application always resulted in a completely new conversation.
 
@@ -43,13 +45,15 @@ The objective of this experiment is to persist conversations so that previously 
 
 The runtime was updated to replace:
 
+```python
 InMemorySessionService()
+```
 
 with:
 
-DatabaseSessionService(
-    db_url="sqlite+aiosqlite:///data/session.db"
-)
+```python
+DatabaseSessionService(db_url="sqlite+aiosqlite:///data/session.db")
+```
 
 Instead of always creating a new session, the runtime now:
 
@@ -60,10 +64,9 @@ This allows conversations to continue seamlessly across multiple application exe
 
 ⸻
 
-# Session Lifecycle
+## Session Lifecycle
 
-The following sequence illustrates the complete session lifecycle.
-
+```text
 Application Start
         │
         ▼
@@ -74,9 +77,9 @@ Load Existing Session
         │
    ┌────┴─────┐
    │          │
-Found      Not Found
+ Found    Not Found
    │          │
-Reuse     Create Session
+Reuse    Create Session
    │          │
    └────┬─────┘
         ▼
@@ -99,7 +102,7 @@ Restart Application
         │
         ▼
 Load Existing Session
-
+```
 ⸻
 
 # Runtime Architecture
@@ -108,6 +111,7 @@ Only the SessionService implementation changed.
 
 The overall runtime architecture remains unchanged.
 
+```text
 run.py
    │
    ▼
@@ -136,11 +140,12 @@ logger.py    env.py      session.py      runner.py
                                                │
                                                ▼
                                               Tools
-
+```
 ⸻
 
 # Project Structure
 
+```text
 launcher/
     run.py
     console.py
@@ -156,7 +161,7 @@ data/
     session.db
 multi_tool_agent/
     agent.py
-
+```
 ⸻
 
 # Responsibilities
@@ -187,7 +192,9 @@ Responsible for:
 
 The application was started using:
 
+```bash
 python -m launcher.run
+```
 
 The runtime successfully:
 
@@ -287,17 +294,20 @@ The experiment successfully validated that:
 
 Example:
 
+```text
 First Run
 
-You : My name is Ankit.
+You   : My name is Ankit.
 Agent : Hello Ankit.
 
 Application stopped.
 
 Second Run
 
-You : What is my name?
+You   : What is my name?
 Agent : Your name is Ankit.
+
+```
 
 This demonstrates that conversation context survives application shutdown and restart using DatabaseSessionService.
 
@@ -329,12 +339,29 @@ Topics to explore:
 * Sharing state across multiple agent interactions
 
 ⸻
-# Conclusion
 
-This experiment extends the custom runtime introduced in Experiment 01 by replacing transient session storage with a persistent database-backed implementation.
+## Verification Checklist
 
-Rather than modifying the agent or execution pipeline, conversation persistence was introduced entirely within the runtime by replacing the SessionService implementation.
+- ✅ Documentation Verified
+- ✅ Source Code Verified
+- ✅ Runtime Verified
+- ✅ SQLite Database Verified
 
-This demonstrates one of the key architectural principles of Google ADK: infrastructure concerns such as session management are cleanly separated from business logic, allowing the runtime to evolve without impacting the agent implementation.
 
-The runtime now supports persistent conversations and provides a solid foundation for exploring conversation state, event history, and memory management in future experiments.#
+## Conclusion
+
+This experiment confirmed that replacing `InMemorySessionService` with `DatabaseSessionService` enables persistent conversations without changing the Agent or Runner.
+
+The runtime successfully restored previous conversations across application restarts, demonstrating the separation between conversation persistence and business logic.
+
+## References
+
+### Documentation
+
+- Google ADK Sessions
+- Google ADK DatabaseSessionService
+
+### Source Code
+
+- `google/adk/sessions/database_session_service.py`
+- `google/adk/sessions/session.py`

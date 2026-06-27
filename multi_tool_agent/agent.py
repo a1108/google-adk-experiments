@@ -1,6 +1,7 @@
 import datetime
 from zoneinfo import ZoneInfo
 from google.adk.agents import Agent
+from google.adk.tools import ToolContext
 
 def get_weather(city: str) -> dict:
     """Retrieves the current weather report for a specified city.
@@ -53,6 +54,29 @@ def get_current_time(city: str) -> dict:
     )
     return {"status": "success", "report": report}
 
+def save_user_profile(
+    name: str,
+    city: str,
+    tool_context: ToolContext,
+) -> dict:
+    """
+    Persist Session, User, and App State for runtime verification.
+    """
+
+    # Persist user-specific information across multiple sessions.
+    tool_context.state["user:name"] = name
+    tool_context.state["user:city"] = city
+
+    # Session State (no prefix)
+    tool_context.state["current_city"] = city
+
+    # App State (shared across the entire application)
+    tool_context.state["app:weather_api_version"] = "v1"
+
+    return {
+        "status": "success",
+        "message": f"Saved profile for {name} from {city}."
+    }
 
 root_agent = Agent(
     name="weather_time_agent",
@@ -63,5 +87,5 @@ root_agent = Agent(
     instruction=(
         "You are a helpful agent who can answer user questions about the time and weather in a city."
     ),
-    tools=[get_weather, get_current_time],
+    tools=[get_weather, get_current_time, save_user_profile],
 )

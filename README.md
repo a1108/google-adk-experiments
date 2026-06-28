@@ -6,7 +6,7 @@
 ![Vertex AI](https://img.shields.io/badge/Vertex-AI-34A853)
 ![Status](https://img.shields.io/badge/Status-Active-success)
 
-> A hands-on engineering exploration of the Google Agent Development Kit (ADK), where each experiment investigates how ADK works internally through documentation, source code analysis, runtime verification, and database inspection.
+> A hands-on engineering lab for exploring the Google Agent Development Kit (ADK). Each experiment investigates how ADK works internally through documentation, source code analysis, runtime verification, and database inspection, with every finding backed by practical experimentation.
 
 ---
 
@@ -43,7 +43,10 @@ This repository explores:
 - Token Optimization
 - Streaming Responses
 - Model Context Protocol (MCP)
-- Multi-Agent Systems
+- Semantic Routing
+- Agent Delegation
+- Invocation Lifecycle
+- Coordinator Agent Architecture
 
 ## Future Explorations
 
@@ -58,11 +61,13 @@ This repository explores:
 
 - Python 3.14
 - Google Agent Development Kit (ADK)
-- Google Gemini
+- Google Gemini 2.5 Flash
 - Vertex AI
-- Google Cloud Platform (GCP)
+- Google Cloud Platform
 - SQLite
-- Model Context Protocol (MCP) *(Upcoming)*
+- Model Context Protocol (MCP)
+- Google Maps MCP Server
+- AgentTool
 
 ---
 
@@ -96,6 +101,11 @@ The objective of this repository is to:
 - Event Compaction
 - Context Management
 - Token Optimization
+- Google Maps MCP Integration
+- Multi-Agent Coordination using AgentTool
+- Google Maps MCP Tool Integration
+- Coordinator Agent
+- Semantic Routing
 
 ---
 
@@ -116,8 +126,8 @@ The objective of this repository is to:
 | ✅ Experiment 04 – Understanding Event Lifecycle | Completed |
 | ✅ Experiment 05 – Context Management & Token Optimization | Completed |
 | 🚧 Experiment 06 – Streaming Responses | In Progress |
-| ⏳ Experiment 07 – Model Context Protocol (MCP) | Planned |
-| ⏳ Experiment 08 – Multi-Agent Systems | Planned |
+| ✅ Experiment 07 – Google Maps MCP Integration | Completed |
+| ✅ Experiment 08 – Multi-Agent Coordination using AgentTool | Completed |
 ---
 
 # Engineering Principles
@@ -188,16 +198,19 @@ Vertex AI Config  │     Runner Execution
              Event Compaction (Optional)
                        │
                        ▼
-                multi_tool_agent
-                       │
-                       ▼
-                  root_agent
-                       │
-                       ▼
-                 Gemini Model
-                       │
-                       ▼
-                Agent Response
+                Coordinator Agent
+                        │
+                        ├──────────────┐
+                        ▼              ▼
+                  Conversation     Google Maps
+                  Context Agent     MCP Agent
+                        │              │
+                        └──────┬───────┘
+                               ▼
+                           Gemini Model
+                               │
+                               ▼
+                          Final Response
 ```                          
                          
 
@@ -223,18 +236,36 @@ Vertex AI Config  │     Runner Execution
 │   ├── runner.py
 │   └── session.py
 │
-├── multi_tool_agent/
-│   ├── __init__.py
-│   └── agent.py
-│
 ├── experiments/
 │   ├── Experiment-01-Building-a-Custom-ADK-Launcher.md
 │   ├── Experiment-02-Implementing-Persistent-Session-Management.md
 │   ├── Experiment-03-Understanding-Conversation-State.md
 │   ├── Experiment-04-Understanding-Event-Lifecycle.md
-│   └── Experiment-05-Context-Management-and-Token-Optimization.md
+│   ├── Experiment-05-Context-Management-and-Token-Optimization.md
+│   ├── Experiment-05–Runtime-Verification-of-Event-Compaction.md
+│   ├── Experiment-07-Google-Maps-MCP-Integration.md
+│   └── Experiment-08-Multi-Agent-Coordination-using-AgentTool.md
 │
 ├── data/
+│
+├── multi_tool_agent/
+│   ├── __init__.py
+│   └── agent.py
+│
+├── common/
+│   ├── __init__.py
+│   ├── agent.py
+│   └── coordinator/
+│       ├── __init__.py
+│       └── agent.py
+│
+├── context_agent/
+│   ├── __init__.py
+│   └── agent.py
+│
+├── mcp_integration/
+│   ├── __init__.py
+│   └── agent.py
 │
 ├── .env.example
 ├── .gitignore
@@ -305,8 +336,16 @@ GOOGLE_CLOUD_LOCATION=us-central1
 
 Launch the custom runtime:
 
+### Custom Runtime
+
 ```bash
 python -m launcher.run
+```
+
+### ADK Web
+
+```bash
+adk web
 ```
 
 The custom runtime automatically:
@@ -341,8 +380,8 @@ Every experiment documents:
 | Experiment 04 – Understanding Event Lifecycle | ✅ |
 | Experiment 05 – Context Management & Token Optimization | ✅ |
 | Experiment 06 – Streaming Responses | 🚧 |
-| Experiment 07 – Model Context Protocol (MCP) | ⏳ |
-| Experiment 08 – Multi-Agent Systems | ⏳ |
+| Experiment 07 – Google Maps MCP Integration | ✅ |
+| Experiment 08 – Multi-Agent Coordination using AgentTool | ✅ |
 
 ---
 
@@ -375,26 +414,33 @@ The focus is on understanding the underlying architecture rather than simply bui
 
 # Repository Highlights
 
-✔ Built a custom Google ADK runtime without relying on `adk web`
+✔ Built a custom Google ADK runtime
 
-✔ Implemented persistent conversation memory using `DatabaseSessionService`
+✔ Explored ADK runtime architecture through engineering experiments
 
-✔ Explored Google ADK runtime architecture through practical engineering experiments
+✔ Implemented persistent conversation memory
 
-✔ Investigated Session Management, Conversation State, Event Lifecycle, Context Reconstruction, Event Compaction, and Token Optimization through documentation, source code analysis, runtime verification, and SQLite database inspection
+✔ Investigated Event Lifecycle, Context Reconstruction, Event Compaction and Token Optimization
 
-✔ Verified Google ADK runtime behavior through official documentation, source code analysis, runtime experiments, and SQLite database inspection
+✔ Built a Google Maps MCP specialist agent
 
-✔ Repository structured as an incremental engineering lab rather than isolated code examples
+✔ Implemented a Coordinator Agent using AgentTool
+
+✔ Verified semantic routing using ADK Trace
+
+✔ Investigated Invocation lifecycle during delegated agent execution
+
+✔ Structured the repository as an engineering lab instead of isolated examples
 
 ---
 
 # References
 
-- Google Agent Development Kit (ADK)
-- Google Gemini
-- Google Vertex AI
-- Model Context Protocol (MCP)
+- Google Agent Development Kit (ADK) Documentation
+- Google ADK GitHub Repository
+- Google Gemini Documentation
+- Vertex AI Documentation
+- Model Context Protocol Specification
 
 ---
 
@@ -403,14 +449,10 @@ The focus is on understanding the underlying architecture rather than simply bui
 Upcoming experiments will explore:
 
 - Streaming Responses
-- Model Context Protocol (MCP)
-- Multi-Agent Systems
-
-Future explorations include:
-
 - Long-Term Memory
 - Retrieval-Augmented Generation (RAG)
 - Production Deployment Patterns
+- Advanced Multi-Agent Workflows
 
 ---
 

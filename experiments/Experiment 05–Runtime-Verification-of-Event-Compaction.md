@@ -35,23 +35,14 @@ EventsCompactionConfig(
 | # | Expectation | What We Observed | Conclusion |
 |---|-------------|------------------|------------|
 | 1 | Event Compaction should become active once the conversation crosses the configured token threshold. | During the second invocation, the prompt reached **368 tokens**, exceeding the configured `token_threshold = 300`. | ✅ **Verified** → [Proof 1](#proof-1) |
-
 | 2 | ADK Runner Executed Event Compaction. | Runtime logs showed **"Running event compactor."** followed by **"Token-threshold event compactor finished."** | ✅ **Verified** → [Proof 2](#proof-2) |
-
 | 3 | Event Compaction Generated a Dedicated Compaction Event | SQLite recorded a new Event containing `actions.compaction` with a generated conversation summary. | ✅ **Verified** → [Proof 3](#proof-3) |
-
 | 4 | The generated summary should preserve the important information shared during the conversation. | The generated summary captured the user's identity, profession, technical interests, current project, and long-term career goal. | ✅ **Verified** → [Proof 4](#proof-4) |
-
 | 5 | Future conversations should use the generated summary instead of replaying the original conversation history. | The LLM request contained **"For context:"** followed by the generated summary instead of replaying the original conversation events. | ✅ **Verified** → [Proof 5](#proof-5) |
-
 | 6 | Conversation Continuity Was Maintained | The agent correctly recalled the user's profile, interests, project, and career goal without requiring the information to be repeated. | ✅ **Verified** → [Proof 6](#proof-6) |
-
 | 7 | Event Compaction should survive an application restart. | After restarting the application, the existing SQLite session was restored and the agent continued using the previously generated summary. | ✅ **Verified** → [Proof 7](#proof-7) |
-
 | 8 | Runtime Behavior Matched the Expected ADK Execution Flow. | Runtime logs, LLM requests, SQLite events, and observed execution all followed the expected Event Compaction lifecycle. | ✅ **Verified** → [Proof 8](#proof-8) |
-
 | 9 | `event_retention_size = 2` should preserve recent conversation while summarizing older conversation. | Runtime observations were consistent with this behavior, although the exact retention behavior was not independently isolated during this experiment. | 🟡 **Partially Verified** → [Proof 9](#proof-9) |
-
 | 10 | `overlap_size = 1` should influence how consecutive compaction windows share context. | The parameter was configured successfully, but its isolated behavior could not be verified because only one configuration was evaluated during this experiment. | ⏳ **Future Verification** → [Proof 10](#proof-10) |
 ⸻
 

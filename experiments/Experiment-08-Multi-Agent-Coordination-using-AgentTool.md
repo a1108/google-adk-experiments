@@ -1,6 +1,6 @@
 # Experiment 08 - Multi-Agent Coordination using AgentTool
 
-## bjective
+## Objective
 
 Understand how a Coordinator Agent delegates user requests to specialist agents using AgentTool in Google ADK.
 
